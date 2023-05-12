@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, camel_case_types, avoid_print
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -7,13 +9,14 @@ class update_record extends StatefulWidget {
   String name;
   String email;
   String password;
-  update_record(this.name, this.email, this.password);
+  update_record(this.name, this.email, this.password, {super.key});
 
   @override
   State<update_record> createState() => _update_recordState();
 }
 
 class _update_recordState extends State<update_record> {
+  List userdata = [];
   TextEditingController name = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
@@ -29,6 +32,7 @@ class _update_recordState extends State<update_record> {
       var response = jsonDecode(res.body);
       if (response["success"] == "true") {
         print("updated");
+        getrecord();
       } else {
         print("some issue");
       }
@@ -37,8 +41,21 @@ class _update_recordState extends State<update_record> {
     }
   }
 
+  Future<void> getrecord() async {
+    String uri = "http://192.168.1.16/practice/view_record.php";
+    try {
+      var response = await http.get(Uri.parse(uri));
+      setState(() {
+        userdata = jsonDecode(response.body);
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   void initState() {
+    getrecord();
     name.text = widget.name;
     email.text = widget.email;
     password.text = widget.password;
@@ -49,8 +66,9 @@ class _update_recordState extends State<update_record> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Update Record')),
-        body: Column(children: [
+      appBar: AppBar(title: const Text('Update Record')),
+      body: Column(
+        children: [
           Container(
             margin: const EdgeInsets.all(10),
             child: TextFormField(
@@ -82,9 +100,11 @@ class _update_recordState extends State<update_record> {
               onPressed: () {
                 updaterecord();
               },
-              child: Text('Update'),
+              child: const Text('Update'),
             ),
           ),
-        ]));
+        ],
+      ),
+    );
   }
 }

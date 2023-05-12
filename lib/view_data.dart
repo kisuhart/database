@@ -1,5 +1,8 @@
+// ignore_for_file: camel_case_types, avoid_print
+
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -52,13 +55,13 @@ class _view_dataState extends State<view_data> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("View Data"),
+        title: const Text("View Data"),
       ),
       body: ListView.builder(
         itemCount: userdata.length,
         itemBuilder: (context, index) {
           return Card(
-            margin: EdgeInsets.all(10),
+            margin: const EdgeInsets.all(10),
             child: ListTile(
               onTap: () {
                 Navigator.push(
@@ -70,10 +73,14 @@ class _view_dataState extends State<view_data> {
                               userdata[index]["upassword"],
                             )));
               },
+              leading: Icon(
+                CupertinoIcons.heart,
+                color: Colors.red,
+              ),
               title: Text(userdata[index]["uname"]),
               subtitle: Text(userdata[index]["uemail"]),
               trailing: IconButton(
-                  icon: Icon(Icons.delete),
+                  icon: const Icon(Icons.delete),
                   onPressed: () {
                     delrecord(userdata[index]["uld"]);
                   }),
